@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "team-notes-api"
+version = "1.0.0"
+description = "A production-ready, multi-tenant TeamNotes API built with FastAPI and SQLAlchemy 2.0"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.28.0",
+    "sqlalchemy>=2.0.28",
+    "pydantic>=2.6.0",
+    "pydantic-settings>=2.2.0",
+    "passlib[bcrypt]>=1.7.4",
+    "bcrypt==4.0.1",
+    "python-jose[cryptography]>=3.3.0",
+    "alembic>=1.13.1",
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[alembic]
+script_location = alembic
+# Leave sqlalchemy.url blank; handled dynamically in env.py
+sqlalchemy.url =

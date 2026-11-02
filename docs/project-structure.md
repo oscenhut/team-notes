@@ -31,9 +31,9 @@ team_notes/
 │   └── routers/
 │       ├── __init__.py
 │       ├── auth.py
-│       ├── users.py
-│       ├── teams.py
-│       ├── notes.py
+│       ├── user.py
+│       ├── team.py
+│       ├── note.py
 │       └── health.py
 ├── tests/
 │   ├── __init__.py
