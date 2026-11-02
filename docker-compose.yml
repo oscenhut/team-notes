@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: team_notes_api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:////app/data/app.db
+      - ENVIRONMENT=production
+    volumes:
+      # Persist SQLite database file outside container lifecycle
+      - sqlite_data:/app/data
+
+volumes:
+  sqlite_data:
