@@ -18,12 +18,18 @@ dependencies = [
     "bcrypt==4.0.1",
     "python-jose[cryptography]>=3.3.0",
     "alembic>=1.13.1",
+    "email-validator>=2.0.0",
+]
+
+# Add test/dev dependencies here
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0.0",
+    "httpx>=0.26.0",
 ]
 
 [tool.setuptools.packages.find]
 include = ["app*"]
 
-[alembic]
-script_location = alembic
-# Leave sqlalchemy.url blank; handled dynamically in env.py
-sqlalchemy.url =
+[tool.alembic]
+script_location = "alembic"

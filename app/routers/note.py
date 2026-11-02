@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.schemas.note import NoteCreate, NoteUpdate, NoteResponse
 from app.services.note import NoteService
+from app.models.user import User
+from app.routers.auth import get_current_active_user
 
 router = APIRouter(prefix="/notes", tags=["Notes"])
 
@@ -51,16 +53,18 @@ def search_notes(
         limit=limit
     )
 
+def get_note_service() -> NoteService:
+    return NoteService()
 
 @router.get("/{note_id}", response_model=NoteResponse)
 def get_note(
     note_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
     note_service: NoteService = Depends(get_note_service)
 ):
-    """Retrieve a specific note by its ID."""
-    return note_service.get_note(db, note_id=note_id)
-
+    """Retrieve a specific note by its ID with multi-tenant access checks."""
+    return note_service.get_note(db, note_id=note_id, current_user_id=current_user.id)
 
 @router.patch("/{note_id}", response_model=NoteResponse)
 def update_note(

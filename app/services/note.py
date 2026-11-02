@@ -27,14 +27,22 @@ class NoteService:
             team_id=team_id
         )
 
-    def get_note(self, db: Session, note_id: int) -> Note:
-        """Retrieve a note by ID, raising 404 if not found."""
+    def get_note(self, db: Session, note_id: int, current_user_id: Optional[int] = None) -> Note:
+        """Retrieve a note by ID, enforcing multi-tenant isolation and visibility rules."""
         note = self.note_repo.get(db, note_id)
         if not note:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Note with id {note_id} not found"
             )
+        
+        # Enforce multi-tenant access control for private notes
+        if note.visibility == "PRIVATE" and current_user_id and note.owner_user_id != current_user_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Not authorized to access this private note"
+            )
+            
         return note
 
     def search_notes(

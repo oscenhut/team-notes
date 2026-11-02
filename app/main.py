@@ -8,12 +8,11 @@ from app.routers import auth, user, team, note, health
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Lifecycle events for startup and shutdown."""
-    # Startup: Automatically create database tables for development/testing
-    # (In high-scale production, prefer Alembic migrations)
     Base.metadata.create_all(bind=engine)
     yield
-    # Shutdown: Clean up database engine connections
-    engine.dispose()
+
+    # Do not dispose the shared engine here.
+    # The engine lifecycle is managed separately.
 
 app = FastAPI(
     title="TeamNotes API",

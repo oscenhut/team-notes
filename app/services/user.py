@@ -11,22 +11,34 @@ class UserService:
         self.user_repo = user_repo or UserRepository()
         self.auth_service = AuthService()
 
+    # def create_user(self, db: Session, *, email: str, name: str, password: str) -> User:
+    #     """Business logic to register a new user with hashed credentials."""
+    #     hashed_password = self.auth_service.get_password_hash(password)
+    #     try:
+    #         return self.user_repo.create(
+    #             db, 
+    #             email=email, 
+    #             name=name, 
+    #             password_hash=hashed_password
+    #         )
+    #     except Exception:
+    #         db.rollback()
+    #         raise HTTPException(
+    #             status_code=status.HTTP_400_BAD_REQUEST,
+    #             detail="User with this email already exists or invalid data provided."
+    #         )
+
     def create_user(self, db: Session, *, email: str, name: str, password: str) -> User:
         """Business logic to register a new user with hashed credentials."""
         hashed_password = self.auth_service.get_password_hash(password)
-        try:
-            return self.user_repo.create(
-                db, 
-                email=email, 
-                name=name, 
-                password_hash=hashed_password
-            )
-        except Exception:
-            db.rollback()
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="User with this email already exists or invalid data provided."
-            )
+        
+        # TEMPORARILY REMOVE try...except to see the real error traceback
+        return self.user_repo.create(
+            db, 
+            email=email, 
+            name=name, 
+            password_hash=hashed_password
+        )
 
     def get_user_by_id(self, db: Session, user_id: int) -> User:
         """Retrieve a user by ID, raising 404 if not found."""
